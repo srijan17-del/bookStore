@@ -1,14 +1,38 @@
 import { useEffect, useState } from "react";
 
 const Navbar = () => {
+  const [theme, setTheme] = useState(
+    localStorage.getItem("theme") ? localStorage.getItem("theme") : "light"
+  );
+
+  const element = document.documentElement;
+
+  useEffect(() => {
+    localStorage.setItem("theme", theme);
+    const localTheme = localStorage.getItem("theme");
+    document.querySelector("html").setAttribute("data-theme", localTheme);
+  }, [theme]);
+
+  const toggleTheme = (e) => {
+    if (e.target.checked) {
+      setTheme("dark");
+      element.classList.add("dark");
+      document.body.classList.add("dark");
+    } else {
+      setTheme("light");
+      element.classList.remove("dark");
+      document.body.classList.remove("dark");
+    }
+  };
+
   const navbarItems = (
     <>
       <li>
-        <a>Home</a>
+        <a href="/">Home</a>
       </li>
 
       <li>
-        <a>Course</a>
+        <a href="/course">Course</a>
       </li>
       <li>
         <a>Contact</a>
@@ -38,10 +62,10 @@ const Navbar = () => {
   return (
     <>
       <div
-        className={`max-w-screen-2xl container md:px-20 px-3 mx-auto sticky top-0 left-0 right-0
+        className={`max-w-screen-2xl container md:px-20 px-3 mx-auto sticky top-0 left-0 right-0 
       ${
         sticky
-          ? " bg-orange-50 shadow-lg duration-300 transition-all ease-in-out"
+          ? " bg-orange-50 shadow-lg duration-300 transition-all ease-in-out dark:bg-slate-800"
           : ""
       } z-[1]`}
       >
@@ -83,10 +107,12 @@ const Navbar = () => {
               <ul className="menu menu-horizontal px-1">{navbarItems}</ul>
             </div>
             <div className="hidden md:block">
-              <label className="px-3 py-2 border-[1px] rounded flex items-center gap-2">
+              <label className="px-3 py-2 border-[1px] dark:border-white/15 rounded flex items-center gap-2">
                 <input
                   type="text"
-                  className="grow outline-none"
+                  className={`grow outline-none ${
+                    sticky ? "dark:bg-slate-800" : "dark:bg-[#1D232A]"
+                  } `}
                   placeholder="Search"
                 />
                 <svg
@@ -109,6 +135,8 @@ const Navbar = () => {
                 type="checkbox"
                 className="theme-controller"
                 value="synthwave"
+                onChange={toggleTheme}
+                checked={theme === "light" ? false : true}
               />
 
               {/* sun icon */}

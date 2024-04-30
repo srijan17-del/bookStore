@@ -1,12 +1,11 @@
 const Cards = ({ item }) => {
-  console.log(item);
   return (
     <>
       <div className="card w-[19rem]  bg-base-100 shadow-lg mt-4 mb-5 hover:scale-105 duration-150">
         <figure>
           <img src={item.image} alt="Shoes" />
         </figure>
-        <div className="card-body bg-slate-100">
+        <div className="card-body bg-slate-100 dark:bg-slate-700">
           <h2 className="card-title">
             {item.name}
             <div className="badge badge-secondary">NEW</div>
