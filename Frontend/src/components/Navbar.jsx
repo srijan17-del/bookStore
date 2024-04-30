@@ -8,20 +8,28 @@ const Navbar = () => {
   const element = document.documentElement;
 
   useEffect(() => {
-    localStorage.setItem("theme", theme);
-    const localTheme = localStorage.getItem("theme");
-    document.querySelector("html").setAttribute("data-theme", localTheme);
-  }, [theme]);
-
-  const toggleTheme = (e) => {
-    if (e.target.checked) {
-      setTheme("dark");
+    if (theme == "dark") {
       element.classList.add("dark");
+      localStorage.setItem("theme", "dark");
+      const localTheme = localStorage.getItem("theme");
+      // add custom data-theme attribute to html tag required to update theme using DaisyUI
+      document.querySelector("html").setAttribute("data-theme", localTheme);
       document.body.classList.add("dark");
     } else {
-      setTheme("light");
       element.classList.remove("dark");
+      localStorage.setItem("theme", "light");
+      const localTheme = localStorage.getItem("theme");
+      // add custom data-theme attribute to html tag required to update theme using DaisyUI
+      document.querySelector("html").setAttribute("data-theme", localTheme);
       document.body.classList.remove("dark");
+    }
+  }, [theme]);
+
+  const toggleTheme = () => {
+    if (theme === "dark") {
+      setTheme("light");
+    } else {
+      setTheme("dark");
     }
   };
 
