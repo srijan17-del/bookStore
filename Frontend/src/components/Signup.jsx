@@ -1,16 +1,42 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import toast, { Toaster } from "react-hot-toast";
+import axios from "axios";
 const Signup = () => {
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
 
     formState: { errors },
   } = useForm();
-  const onSubmit = (data) => console.log(data);
+  const onSubmit = async (data) => {
+    const userInfo = {
+      fullname: data.fullname,
+      email: data.email,
+      password: data.password,
+    };
+    await axios
+      .post("http://localhost:4001/user/signup", userInfo)
+      .then((res) => {
+        console.log(res.data);
+        if (res.data) {
+          toast.success("SignedUp successfully!");
+          localStorage.setItem("userInfo", JSON.stringify(res.data.user));
+          navigate("/");
+          window.location.reload();
+        }
+      })
+      .catch((error) => {
+        console.log("error:", error);
+
+        toast.error(error.response.data.message);
+      });
+  };
   return (
     <>
       <div className="">
+        <Toaster />
         <input type="checkbox" id="my_modal_6" className="modal-toggle " />
         <div className="flex justify-center items-center mt-16 " role="dialog">
           <div className="modal-box ">
@@ -34,10 +60,10 @@ const Signup = () => {
                     type="text"
                     className="grow"
                     placeholder="Username"
-                    {...register("text", { required: true })}
+                    {...register("fullname", { required: true })}
                   />
                 </label>
-                {errors.text && (
+                {errors.fullname && (
                   <span className="text-red-500 ">This field is required</span>
                 )}
               </div>
